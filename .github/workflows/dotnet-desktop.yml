@@ -1,0 +1,45 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - master 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - 5672:5672  
+          - 15672:15672 
+        env:
+          RABBITMQ_DEFAULT_USER: guest  
+          RABBITMQ_DEFAULT_PASS: guest  
+        options: >-
+          --health-cmd "rabbitmq-diagnostics -q ping"
+          --health-interval 30s
+          --health-timeout 10s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build the project
+        run: dotnet build --no-restore
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
