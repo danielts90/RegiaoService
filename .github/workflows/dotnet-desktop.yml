@@ -19,6 +19,9 @@ jobs:
         ports:
           - 5672:5672
           - 15672:15672
+        env:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
         options: >-
           --health-cmd "curl -f http://localhost:15672/ || exit 1"
           --health-interval 30s
@@ -40,5 +43,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Build & test
+      run: >
+        dotnet test
+        --configuration Debug
+         --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
