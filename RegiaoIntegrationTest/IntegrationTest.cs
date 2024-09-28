@@ -40,7 +40,6 @@ namespace RegiaoIntegrationTest
                     options.UseInMemoryDatabase("InMemoryTestDb");
                 });
 
-                //services.AddSingleton<IMessageProducer>(provider => new TestMessageProducer("test.regiao.updated"));
                 services.AddSingleton<IMessageProducer>(provider => new Producer("test.regiao.updated"));
 
 

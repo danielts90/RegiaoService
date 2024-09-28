@@ -70,7 +70,18 @@ using (var scope = app.Services.CreateScope())
 
 static async Task<IResult> GetAll(RegiaoDb db)
 {
-    return TypedResults.Ok(await db.Regioes.ToArrayAsync());
+    try
+    {
+        return TypedResults.Ok(await db.Regioes.ToArrayAsync());
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.StackTrace);
+        Console.WriteLine(ex.Message);
+        return TypedResults.BadRequest();
+
+    }
 }
 
 static async Task<IResult> GetById(int id, RegiaoDb db)
