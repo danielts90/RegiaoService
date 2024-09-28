@@ -39,14 +39,30 @@ namespace RegiaoIntegrationTest
         [Fact]
         public async Task Get_Regioes_ReturnsSuccessStatusCode()
         {
-            // Act
-            var response = await _client.GetAsync("/regiao");
+            try
+            {
+                // Act
+                var response = await _client.GetAsync("/regiao");
 
-            // Assert
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(content);
-            Assert.NotNull(content);
+                // Assert
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(content);
+                Assert.NotNull(content);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP Request Exception: {ex.Message}");
+                throw; // Re-throw to fail the test
+            }
+            //// Act
+            //var response = await _client.GetAsync("/regiao");
+
+            //// Assert
+            //response.EnsureSuccessStatusCode();
+            //var content = await response.Content.ReadAsStringAsync();
+            //Console.WriteLine(content);
+            //Assert.NotNull(content);
         }
 
         [Fact]
