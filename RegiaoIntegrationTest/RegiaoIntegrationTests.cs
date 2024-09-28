@@ -45,6 +45,7 @@ namespace RegiaoIntegrationTest
             // Assert
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(content);
             Assert.NotNull(content);
         }
 
