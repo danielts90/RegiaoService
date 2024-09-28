@@ -68,7 +68,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-static async Task<IResult> GetAll(RegiaoDb db)
+//static async Task<IResult> GetAll(RegiaoDb db)
+static async Task<IResult> GetAll()
 {
     //return TypedResults.Ok(await db.Regioes.ToArrayAsync());
     return TypedResults.Ok();
