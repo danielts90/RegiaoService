@@ -28,12 +28,12 @@ namespace RegiaoIntegrationTest
         {
             _client = factory.CreateClient();
 
-            var scopeFactory = factory.Services.GetService<IServiceScopeFactory>();
-            using (var scope = scopeFactory.CreateScope())
-            {
-                _dbContext = scope.ServiceProvider.GetRequiredService<RegiaoDb>();
-                Seed(); 
-            }
+            //var scopeFactory = factory.Services.GetService<IServiceScopeFactory>();
+            //using (var scope = scopeFactory.CreateScope())
+            //{
+            //    _dbContext = scope.ServiceProvider.GetRequiredService<RegiaoDb>();
+            //    //Seed(); 
+            //}
         }
 
         [Fact]
