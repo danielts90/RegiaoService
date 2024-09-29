@@ -21,8 +21,6 @@ builder.Services.AddOpenApiDocument(config =>
 
 builder.Services.AddSingleton<IMessageProducer>(provider => new Producer("regiao.updated"));
 
-
-
 var app = builder.Build();
 
 var counter = Metrics.CreateCounter("webapimetric", "Contador de requests",
@@ -60,18 +58,13 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RegiaoDb>();
-    if (dbContext.Database.IsRelational())
-    {
-        dbContext.Database.Migrate();
-    }
 }
 
 
-//static async Task<IResult> GetAll(RegiaoDb db)
-static async Task<IResult> GetAll()
+static async Task<IResult> GetAll(RegiaoDb db)
 {
-    //return TypedResults.Ok(await db.Regioes.ToArrayAsync());
-    return TypedResults.Ok();
+    var regioes = await db.Regioes.ToArrayAsync();
+    return TypedResults.Ok(regioes);
 }
 
 static async Task<IResult> GetById(int id, RegiaoDb db)

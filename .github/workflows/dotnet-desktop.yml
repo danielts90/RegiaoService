@@ -1,5 +1,3 @@
-name: .NET 8 CI
-
 on:
   push:
     branches:
@@ -10,24 +8,22 @@ on:
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
 
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Install dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
+      - name: Build
+        run: dotnet build -c Debug
 
-    - name: Build & test
-      run:  dotnet test --no-build --verbosity normal
+      - name: Test with the dotnet CLI
+        run: dotnet test -c Debug

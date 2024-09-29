@@ -9,35 +9,17 @@ namespace RegiaoIntegrationTest
     public class RegiaoIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
-        private readonly RegiaoDb _dbContext;
-
-        public void Seed()
-        {
-            if (!_dbContext.Regioes.Any())
-            {
-                _dbContext.Regioes.AddRange(
-                    new Regiao { Id = 1, Name = "Região 1" },
-                    new Regiao { Id = 2, Name = "Região 2" },
-                    new Regiao { Id = 3, Name = "Região 3" }
-                );
-                _dbContext.SaveChanges();
-            }
-        }
 
         public RegiaoIntegrationTests(CustomWebApplicationFactory<Program> factory)
         {
-            _client = factory.CreateClient();
 
-            //var scopeFactory = factory.Services.GetService<IServiceScopeFactory>();
-            //using (var scope = scopeFactory.CreateScope())
-            //{
-            //    _dbContext = scope.ServiceProvider.GetRequiredService<RegiaoDb>();
-            //    //Seed(); 
-            //}
+            _client = factory.WithWebHostBuilder(builder =>
+            {
+            }).CreateClient();
         }
 
         [Fact]
-        public async Task Get_Regioes_ReturnsSuccessStatusCode()
+        public async Task Get_Contatos_ReturnsSuccessStatusCode()
         {
             // Act
             var response = await _client.GetAsync("/regiao");
@@ -50,7 +32,7 @@ namespace RegiaoIntegrationTest
         }
 
         [Fact]
-        public async Task Get_RegioesById_ReturnsSuccessStatusCode()
+        public async Task Get_ContatosById_ReturnsSuccessStatusCode()
         {
             // Act
             var response = await _client.GetAsync("/regiao/1");
@@ -65,7 +47,7 @@ namespace RegiaoIntegrationTest
         public async Task CreateRegiao_IntegrationTest_ReturnsSuccessStatusCode()
         {
             // Arrange
-            var regiao = new Regiao { Name = "Nova Região" };
+            var regiao = new Regiao { Name = "Regiao A" };
             var json = JsonSerializer.Serialize(regiao);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -80,10 +62,10 @@ namespace RegiaoIntegrationTest
         public async Task Update_RegiaoById_ReturnsSuccessStatusCode()
         {
             // Arrange
-            var regiao = new Regiao { Name = "TesteUpdate" };
+            var regiao = new Regiao { Name = "Regiao AA" };
             var json = JsonSerializer.Serialize(regiao);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            
+
             //Act
             var response = await _client.PutAsync("/regiao/1", content);
 
@@ -103,4 +85,5 @@ namespace RegiaoIntegrationTest
             Assert.NotNull(content);
         }
     }
+
 }

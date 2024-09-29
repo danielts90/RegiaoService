@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RegiaoApi.Context;
+using RegiaoApi.Models;
 
 namespace RegiaoIntegrationTest
 {
@@ -20,7 +21,18 @@ namespace RegiaoIntegrationTest
 
                 dbContext.Database.EnsureDeleted();
                 dbContext.Database.EnsureCreated();
+
+                if (!dbContext.Regioes.Any())
+                {
+                    dbContext.Regioes.AddRange(
+                        new Regiao { Name = "Regiao 1" },
+                        new Regiao { Name = "Regiao 2" },
+                        new Regiao { Name = "Regiao 3" }
+                    );
+                    dbContext.SaveChanges();
+                }
             }
+
 
             return host;
         }
@@ -37,12 +49,10 @@ namespace RegiaoIntegrationTest
 
                 services.AddDbContext<RegiaoDb>(options =>
                 {
-                    options.UseInMemoryDatabase("InMemoryTestDb");
+                    var connectionString = "Host=localhost;Database=RegiaoTestDb;Username=techuser;Password=techpassword";
+                    options.UseNpgsql(connectionString);
                 });
-
                 services.AddSingleton<IMessageProducer>(provider => new Producer("test.regiao.updated"));
-
-
             });
         }
     }

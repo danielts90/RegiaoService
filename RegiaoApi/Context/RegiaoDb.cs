@@ -15,6 +15,10 @@ public class RegiaoDb : DbContext
         builder.Entity<Regiao>()
             .ToTable("regiao") 
             .HasKey(c => c.Id);
+
+        builder.Entity<Regiao>()
+            .Property(o => o.Id)
+            .ValueGeneratedOnAdd();
         
         builder.Entity<Regiao>()
             .Property(c => c.Name)
