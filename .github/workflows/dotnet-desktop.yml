@@ -30,7 +30,4 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Build & test
-      run: >
-        dotnet test
-        --configuration Debug
-         --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
+      run:  dotnet test --no-build --verbosity normal
